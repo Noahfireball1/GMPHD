@@ -1,22 +1,44 @@
 classdef Observations
-    %OBSERVATIONS Summary of this class goes here
-    %   Detailed explanation goes here
     
     properties
-        Property1
+        truth = [];
+        lambda = [];
+        clutterXRange = [-1000 1000];
+        clutterYRange = [-1000 1000];
+        clutter = [];
+
+        measVar = 10;
+        measurements = [];
+
     end
     
     methods
-        function obj = Observations(inputArg1,inputArg2)
-            %OBSERVATIONS Construct an instance of this class
-            %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
-        end
         
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
+        function obj = getMeasurements(obj)
+
+            obj.genClutter();
+
+            obj.genMeasurements();
+
+            obj.measurements = [obj.clutter obj.measurements];
+        end
+
+        function genClutter(obj)
+
+            clutterAmount = poissrnd(obj.lambda);
+
+            obj.clutter(:,1) = randi(obj.clutterXRange,[clutterAmount 1]);
+            obj.clutter(:,2) = randi(obj.clutterYRange,[clutterAmount 1]);
+
+        end
+
+        function genMeasurements(obj)
+
+            numTrueTracks = size(obj.truth,2);
+
+            obj.measurements(:,1) = obj.truth(:,1) + obj.measVar*randn([numTrueTracks 1]);
+            obj.measurements(:,1) = obj.truth(:,2) + obj.measVar*randn([numTrueTracks 1]);
+
         end
     end
 end
