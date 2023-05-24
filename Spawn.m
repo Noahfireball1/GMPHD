@@ -14,7 +14,7 @@ classdef Spawn
     end
     
     methods        
-        function obj = spawns(obj,timeStep)
+        function obj = predictSpawns(obj,timeStep)
 
             obj.model = MotionModel(timeStep);
 
