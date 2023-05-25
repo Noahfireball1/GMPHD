@@ -40,6 +40,12 @@ classdef Observations
             obj.measurements(:,1) = obj.truth(:,2) + obj.measVar*randn([numTrueTracks 1]);
 
         end
+
+        function clutterIntensity = clutterIntensity(obj,meas)
+
+            clutterIntensity = obj.lambda*mvnpdf(obj.clutterXRange,obj.clutterYRange,meas);
+
+        end
     end
 end
 
