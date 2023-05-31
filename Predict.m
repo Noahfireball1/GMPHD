@@ -25,12 +25,11 @@ classdef Predict
 
             obj.spawn = Spawn();
 
-            obj.model = MotionModel(obj.timeStep);
-
         end
 
         function prediction(obj)
 
+            obj.model = MotionModel(obj.timeStep);
             obj.birth.predictBirths();
             obj.spawn.predictSpawns();
 

@@ -8,9 +8,7 @@ classdef GMPHD
         Update
         Observations
         Prune
-        Merge
         Extraction
-        Estimates
     end
     
     methods
@@ -32,14 +30,8 @@ classdef GMPHD
             % Step 4: Pruning
             obj.Prune = Prune();
 
-            % Step 5: Merging
-            obj.Merge = Merge();
-
-            % Step 6a: Extraction
+            % Step 5: Extraction
             obj.Extraction = Extraction();
-
-            % Step 6b: Estimates
-            obj.Estimates = Estimates();
             
         end
         

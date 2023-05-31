@@ -3,20 +3,31 @@ classdef Prune
     %   Detailed explanation goes here
     
     properties
-        Property1
+        numTracks = [];
+        weights = [];
+        states = [];
+        covariances = [];
+
+        threshold = [];
+
+        prunedWeights = [];
+        prunedStates = [];
+        prunedCovariances = [];
+
     end
     
     methods
-        function obj = Prune(inputArg1,inputArg2)
-            %PRUNE Construct an instance of this class
-            %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
-        end
-        
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
+        function pruning(obj)
+
+            for track = 1:obj.numTracks
+
+                if obj.weights(track) > obj.threshold
+                    obj.prunedWeights = [obj.prunedWeights obj.weights(track)];
+                    obj.prunedStates = [obj.prunedStates obj.states(:,track)];
+                    obj.prunedCovariances = cat(3,obj.prunedCovariances,obj.covariances(:,:,track));
+                end
+
+            end
         end
     end
 end

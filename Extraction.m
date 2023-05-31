@@ -1,22 +1,32 @@
-classdef Extraction
-    %EXTRACTION Summary of this class goes here
-    %   Detailed explanation goes here
-    
+classdef Extraction    
     properties
-        Property1
+        numTracks = [];
+        weights = [];
+        states = [];
+        covariances = [];
+
+        threshold = [];
+
+        extractedWeights = [];
+        extractedStates = [];
+        extractedCovariances = [];
     end
     
     methods
-        function obj = Extraction(inputArg1,inputArg2)
-            %EXTRACTION Construct an instance of this class
-            %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
-        end
         
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
+        function extracting(obj)
+
+            for track = 1:obj.numTracks
+
+                if obj.weights(track) > obj.threshold
+                    
+                    obj.extractedWeights = [obj.extractedWeights obj.weights(track)];
+                    obj.extractedStates = [obj.extractedStates obj.states(:,track)];
+                    obj.extractedCovariances = cat(3,obj.extractedCovariances,obj.covariances(:,:,track));
+
+                end
+
+            end
         end
     end
 end

@@ -1,4 +1,4 @@
-classdef Initialize
+classdef Initialize < handle
     %INITIALIZE Summary of this class goes here
     %   Detailed explanation goes here
 
@@ -8,7 +8,8 @@ classdef Initialize
         timeStep = 1;
         scenario = 'simple';
         model = [];
-        truth = [];
+        state = [];
+        numTargets = [];
 
     end
 
@@ -19,7 +20,7 @@ classdef Initialize
 
             switch lower(obj.scenario)
                 case 'simple'
-                    simple(parameters.motion_model.F,numTimestep);
+                    obj.simple();
 
                 case 'ospa'
                     OSPA(parameters.motion_model.F,numTimestep);
@@ -37,6 +38,7 @@ classdef Initialize
 
             timeArray = obj.initTime:obj.timeStep:obj.finalTime;
             numTimeSteps = numel(timeArray);
+            obj.numTargets = zeros(numTimeSteps,1);
 
             %% Determinstic Starting Points
             % Track 1
@@ -68,14 +70,12 @@ classdef Initialize
                     targetState = obj.model.F*targetState;
 
                     % Sticking together propgated states
-                    obj.truth.state{time} = [obj.truth.state{time} targetState];
+                    obj.state{time,target} = targetState;
 
                     % Total number of existing tracks per timestep
-                    obj.truth.numTargets(time) = obj.truth.num_targets(time) + 1;
+                    obj.numTargets(time,:) = obj.numTargets(time) + 1;
                 end
             end
-
-
 
         end
 

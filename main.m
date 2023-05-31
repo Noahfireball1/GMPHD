@@ -8,3 +8,5 @@ format shortg
 gmphd = GMPHD();
 
 %% Loading in scenario and generating measurements
+gmphd.Initialization.scenario = 'simple';
+gmphd.Initialization.genTruth();
