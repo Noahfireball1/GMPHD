@@ -2,7 +2,7 @@ classdef Observations
     
     properties
         truth = [];
-        lambda = [];
+        lambda = 2;
         clutterXRange = [-1000 1000];
         clutterYRange = [-1000 1000];
         clutter = [];

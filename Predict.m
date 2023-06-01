@@ -1,4 +1,4 @@
-classdef Predict
+classdef Predict < handle
     %PREDICT Summary of this class goes here
     %   Detailed explanation goes here
 
@@ -30,8 +30,8 @@ classdef Predict
         function prediction(obj)
 
             obj.model = MotionModel(obj.timeStep);
+            obj.spawn.predictSpawns(obj.timeStep);
             obj.birth.predictBirths();
-            obj.spawn.predictSpawns();
 
             for track = 1:obj.numTracks
 
@@ -59,11 +59,13 @@ classdef Predict
 
         end
 
-        function obj = combine(obj)
+        function combine(obj)
 
             obj.predWeights = cat(2,obj.predWeights,obj.birth.weights,obj.spawn.weights);
-            obj.predStates = cat(2,obj.predStates,obj.birth.state,obj.spawn.state);
-            obj.predCovariances = cat(3,surviving_state_variables.covariance,birth_state_variables.covariance,spawn_state_variables.covariance);
+            obj.predStates = cat(2,obj.predStates,obj.birth.states,obj.spawn.states);
+            obj.predCovariances = cat(3,obj.predCovariances,obj.birth.covariances,obj.spawn.covariances);
+
+            obj.numTracks = length(obj.predWeights);
 
 
         end

@@ -1,9 +1,9 @@
-classdef Spawn
+classdef Spawn < handle
     %SPAWN Summary of this class goes here
     %   Detailed explanation goes here
     
     properties
-        numSpawns = [];
+        numSpawns = 2;
         staticWeight = [];
         staticCovariance = [];
         model = [];
