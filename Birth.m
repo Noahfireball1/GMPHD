@@ -3,14 +3,14 @@ classdef Birth < handle
     %   Detailed explanation goes here
     
     properties
-        numBirths = 10;
+        numBirths = 100;
         weights = [];
         states = [];
         covariances = [];
 
-        staticWeight = 0.2;
+        staticWeight = 0.01;
         stateRange = [-1000 1000 -50 50];
-        staticCovariance = diag([4 4]);
+        staticCovariance = diag([4 4 4 4]);
     end
     
     methods        

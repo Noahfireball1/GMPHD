@@ -3,7 +3,7 @@ classdef Initialize < handle
     %   Detailed explanation goes here
 
     properties
-        initTime = 0;
+        initTime = 1;
         finalTime = 100;
         timeStep = 1;
         scenario = 'simple';
@@ -70,7 +70,7 @@ classdef Initialize < handle
                     targetState = obj.model.F*targetState;
 
                     % Sticking together propgated states
-                    obj.state{time,target} = targetState;
+                    obj.state{time,1}(:,target) = targetState;
 
                     % Total number of existing tracks per timestep
                     obj.numTargets(time,:) = obj.numTargets(time) + 1;

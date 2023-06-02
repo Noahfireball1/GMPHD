@@ -3,9 +3,9 @@ classdef Spawn < handle
     %   Detailed explanation goes here
     
     properties
-        numSpawns = 2;
-        staticWeight = [];
-        staticCovariance = [];
+        numSpawns = 100;
+        staticWeight = 0.2;
+        staticCovariance = diag([1 1 1 1]);
         model = [];
 
         numTracks = [];

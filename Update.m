@@ -4,8 +4,9 @@ classdef Update < handle
 
     properties
         model = [];
-        pDetection = [];
+        pDetection = 0.98;
         numTracks = [];
+        measurements = [];
 
         weights = [];
         states = [];
@@ -18,7 +19,7 @@ classdef Update < handle
     end
 
     methods
-        function outputArg = updating(obj,dt)
+        function updating(obj,dt)
 
             obj.model = MotionModel(dt);
             obj.numTracks = length(obj.weights);
@@ -27,11 +28,11 @@ classdef Update < handle
             [eta,S,K,P] = obj.kalmanComponents();
 
             % Step B1: Update Objects if no detected measurements
-            if isempty(measurements)
+            if isempty(obj.measurements)
                 obj.noDetections();
             else
                 % Step B2: Posteriori Kalman Update
-                obj.kalmanPropagation();
+                obj.kalmanPropagation(eta,S,K,P);
             end
 
         end
@@ -42,8 +43,8 @@ classdef Update < handle
 
                 eta(:,track) = obj.model.H*obj.states(:,track);
                 S(:,:,track) = obj.model.R + obj.model.H*obj.covariances(:,:,track)*obj.model.H';
-                K(:,track) = obj.covariances(:,:,track)*obj.model.H'\S(:,:,track);
-                P(:,:,track) = (eye(size(K(track))) - K(track)*obj.model.H)*obj.covariances(:,:,track);
+                K(:,:,track) = (obj.covariances(:,:,track)*obj.model.H')*S(:,:,track)^-1;
+                P(:,:,track) = (eye(size(K(track))) - K(:,:,track)*obj.model.H)*obj.covariances(:,:,track);
 
             end
 
@@ -61,28 +62,28 @@ classdef Update < handle
 
         end
 
-        function kalmanPropagation(obj,measurements,eta,S,K,P)
+        function kalmanPropagation(obj,eta,S,K,P)
 
             l = 0;
-            for meas = 1:length(measurements)
+            for meas = 1:length(obj.measurements)
                 l = l + 1;
                 for track = 1:obj.numTracks
                     idx = l*obj.numTracks + track;
 
-                    obj.updWeights(idx) = obj.pDetection*obj.weights(track)*mvnpdf(measurements(meas), eta(:,track), S(:,:,track));
-                    obj.updStates(:,idx) = obj.states(:,track) + K(:,track)*(measurements(meas) - eta(:,track));
+                    obj.updWeights(idx) = obj.pDetection*obj.weights(track)*mvnpdf(obj.measurements(:,meas), eta(:,track), S(:,:,track));
+                    obj.updStates(:,idx) = obj.states(:,track) + K(:,:,track)*(obj.measurements(meas) - eta(:,track));
                     obj.updCovariances(:,:,idx) = P(:,:,track);
 
                 end
 
-                obj.normalizeWeight(idx);
+                obj.normalizeWeight(l,meas);
             end
 
             obj.numTracks = l*track + track;
 
         end
 
-        function normalizeWeight(obj,l,meas,measurements)
+        function normalizeWeight(obj,l,meas)
 
             weightTally = 0;
             getCI = Observations();
@@ -97,7 +98,7 @@ classdef Update < handle
             for track = 1:obj.numTracks
 
                 oldWeight = obj.updWeights(l*obj.numTracks + track);
-                newWeight = oldWeight/(getCI.clutterIntensity(measurements(meas)) + weightTally);
+                newWeight = oldWeight/(getCI.clutterIntensity(obj.measurements(:,meas)) + weightTally);
 
                 obj.updWeights(l*obj.numTracks + track) = newWeight;
 

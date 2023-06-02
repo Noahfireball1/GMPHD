@@ -32,6 +32,7 @@ classdef Predict < handle
             obj.model = MotionModel(obj.timeStep);
             obj.spawn.predictSpawns(obj.timeStep);
             obj.birth.predictBirths();
+            obj.numTracks = length(obj.weights);
 
             for track = 1:obj.numTracks
 
@@ -39,7 +40,7 @@ classdef Predict < handle
                 state = obj.states(:,track);
                 covariance = obj.covariances(:,:,track);
 
-                [predWeight,predState,predCovariance] = kalmanPropagation(weight,state,covariance);
+                [predWeight,predState,predCovariance] = obj.kalmanPropagation(weight,state,covariance);
 
                 obj.predWeights(track) = predWeight;
                 obj.predStates(:,track) = predState;

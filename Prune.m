@@ -1,4 +1,4 @@
-classdef Prune
+classdef Prune < handle
     %PRUNE Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -8,7 +8,7 @@ classdef Prune
         states = [];
         covariances = [];
 
-        threshold = [];
+        threshold = 0.1;
 
         prunedWeights = [];
         prunedStates = [];
@@ -19,6 +19,8 @@ classdef Prune
     methods
         function pruning(obj)
 
+            obj.numTracks = length(obj.weights);
+
             for track = 1:obj.numTracks
 
                 if obj.weights(track) > obj.threshold
@@ -28,6 +30,14 @@ classdef Prune
                 end
 
             end
+        end
+
+        function reset(obj)
+
+            obj.prunedWeights = [];
+            obj.prunedStates = [];
+            obj.prunedCovariances = [];
+
         end
     end
 end
