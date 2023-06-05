@@ -1,12 +1,17 @@
 classdef Extraction < handle
+    %EXTRACTION saves estimated tracks that exceed the user-defined threshold 
     properties
+
+        % User-Defined Properties
+        threshold {mustBeNumeric,mustBePositive} = 0.4;
+        
+        % Set by Filter
         numTracks = [];
         weights = [];
         states = [];
         covariances = [];
 
-        threshold = 0.4;
-
+        % Products of Methods
         extractedWeights = [];
         extractedStates = [];
         extractedCovariances = [];

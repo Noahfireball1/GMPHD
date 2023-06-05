@@ -1,13 +1,19 @@
 classdef Observations < handle
+    %OBSERVATIONS generates measurements based on the timestep and the truth state
 
     properties
+
+        % User-Defined Properties
+        measVar        {mustBeNumeric,mustBePositive}                           = 3;
+        lambda         {mustBeNumeric,mustBeInteger,mustBeInRange(lambda,0,10)} = 1;
+        clutterXRange  {mustBeVector,mustBeNumeric}                             = [-1000 1000];
+        clutterYRange  {mustBeVector,mustBeNumeric}                             = [-1000 1000];
+
+        % Set by Filter
         truth = [];
-        lambda = 1;
-        clutterXRange = [-1000 1000];
-        clutterYRange = [-1000 1000];
         clutter = [];
 
-        measVar = 3;
+        % Product of Methods
         measurements = [];
 
     end

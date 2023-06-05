@@ -1,18 +1,21 @@
 classdef Spawn < handle
-    %SPAWN Summary of this class goes here
-    %   Detailed explanation goes here
+    %SPAWN creates estimates off existing tracks based on their states
     
     properties
-        numSpawns = 100;
-        staticWeight = 0.2;
-        staticCovariance = diag([1 1 1 1]);
-        model = [];
 
+        % User-Defined Properties
+        numSpawns        {mustBeNumeric,mustBePositive,mustBeInteger} = 100;
+        staticWeight     {mustBeNumeric,mustBePositive}               = 0.2;
+        staticCovariance {mustBeNumeric}                              = diag([1 0.5 1 0.5]);
+        
+        % Set by Filter
         numTracks = [];
         weights = [];
         states = [];
         covariances = [];
+        model = [];
 
+        % Products of Methods
         predWeights = [];
         predStates = [];
         predCovariances = [];
@@ -22,6 +25,7 @@ classdef Spawn < handle
         function obj = predictSpawns(obj,timeStep)
             
             obj.model = MotionModel(timeStep);
+            obj.numTracks = length(obj.weights);
 
             idx = 1;
             for spawn = 1:obj.numSpawns

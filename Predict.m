@@ -1,21 +1,26 @@
 classdef Predict < handle
-    %PREDICT Summary of this class goes here
-    %   Detailed explanation goes here
+    %PREDICT uses specified motion model to propagate estimated objects positions
 
     properties
-        pSurvival = 0.9;
-        model = [];
-        timeStep = [];
-        weights = [];
-        states = [];
-        covariances = [];
-        birth = [];
-        spawn = [];
-        numTracks = [];
 
-        predWeights = [];
-        predStates = [];
-        predCovariances = [];
+        % User-Defined Properties
+        pSurvival {mustBePositive,mustBeNumeric} = 0.9; % Probability that object survives into next timestep
+
+        % Set by filter
+        model                                    = [];
+        timeStep                                 = [];
+        weights                                  = [];
+        states                                   = [];
+        covariances                              = [];
+        birth                                    = [];
+        spawn                                    = [];
+        numTracks                                = [];
+
+        % Products of Methods
+        predWeights                              = [];
+        predStates                               = [];
+        predCovariances                          = [];
+        
     end
 
     methods
@@ -62,9 +67,9 @@ classdef Predict < handle
 
         function combine(obj)
 
-            obj.predWeights = cat(2,obj.predWeights,obj.birth.weights,obj.spawn.weights);
-            obj.predStates = cat(2,obj.predStates,obj.birth.states,obj.spawn.states);
-            obj.predCovariances = cat(3,obj.predCovariances,obj.birth.covariances,obj.spawn.covariances);
+            obj.predWeights = cat(2,obj.predWeights,obj.birth.birthWeights,obj.spawn.weights);
+            obj.predStates = cat(2,obj.predStates,obj.birth.birthStates,obj.spawn.states);
+            obj.predCovariances = cat(3,obj.predCovariances,obj.birth.birthCovariances,obj.spawn.covariances);
 
             obj.numTracks = length(obj.predWeights);
 

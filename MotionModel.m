@@ -29,7 +29,7 @@ classdef MotionModel
 
             obj.R = obj.varR.*eye(2);
 
-            obj.H = [1 0 0 0;0 0 1 0];
+            obj.H = [1 0 0 0; 0 0 1 0];
 
         end
     end

@@ -1,15 +1,18 @@
 classdef Prune < handle
-    %PRUNE Summary of this class goes here
-    %   Detailed explanation goes here
+    %PRUNE rids of any track estimates below a certain weight threshold
     
     properties
+
+        % User-Defined Properties
+        threshold {mustBeNumeric,mustBePositive} = 0.1;
+
+        % Set by Filter
         numTracks = [];
         weights = [];
         states = [];
         covariances = [];
 
-        threshold = 0.1;
-
+        % Products of Methods
         prunedWeights = [];
         prunedStates = [];
         prunedCovariances = [];

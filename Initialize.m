@@ -1,15 +1,17 @@
 classdef Initialize < handle
-    %INITIALIZE Summary of this class goes here
-    %   Detailed explanation goes here
+    %INITIALIZE generatues 'truth' trajectories given scenario property
 
     properties
-        initTime = 1;
-        finalTime = 100;
-        timeStep = 1;
-        scenario = 'simple';
-        model = [];
-        state = [];
-        numTargets = [];
+        % User Defined Properties
+        initTime  {mustBePositive,mustBeNumeric} = 1;
+        finalTime {mustBePositive,mustBeNumeric} = 100;
+        timeStep  {mustBePositive,mustBeNumeric} = 1;
+        scenario                                 = 'simple';
+
+        % Product of methods
+        model                                    = [];
+        state                                    = [];
+        numTargets                               = [];
 
     end
 
@@ -61,7 +63,7 @@ classdef Initialize < handle
                 % Getting initial state for track defined above
                 targetState = xStart(:,target);
 
-                %Finding ending state of track
+                % Finding ending state of track
                 targetStateFinal = min(tDeath(target),numTimeSteps);
 
                 % Stepping through time and propogating track states
@@ -80,11 +82,12 @@ classdef Initialize < handle
         end
 
         function OSPA(obj)
+            % WIP
 
         end
 
         function random(obj)
-
+            % WIP
 
         end
     end

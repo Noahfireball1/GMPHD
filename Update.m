@@ -3,15 +3,19 @@ classdef Update < handle
     %   Detailed explanation goes here
 
     properties
-        model = [];
-        pDetection = 0.98;
-        numTracks = [];
-        measurements = [];
-
+        
+        % User-Defined Properties
+        pDetection {mustBeNumeric,mustBePositive} = 0.98;
+        
+        % Set by Filter
         weights = [];
         states = [];
         covariances = [];
+        model = [];
+        numTracks = [];
+        measurements = [];
 
+        % Products of Methods
         updWeights = [];
         updStates = [];
         updCovariances = [];
@@ -43,8 +47,8 @@ classdef Update < handle
 
                 eta(:,track) = obj.model.H*obj.states(:,track);
                 S(:,:,track) = obj.model.R + obj.model.H*obj.covariances(:,:,track)*obj.model.H';
-                K(:,:,track) = (obj.covariances(:,:,track)*obj.model.H')*S(:,:,track)^-1;
-                P(:,:,track) = (eye(size(K(track))) - K(:,:,track)*obj.model.H)*obj.covariances(:,:,track);
+                K(:,:,track) = obj.covariances(:,:,track)*obj.model.H'*S(:,:,track)^-1;
+                P(:,:,track) = (eye(4) - K(:,:,track)*obj.model.H)*obj.covariances(:,:,track);
 
             end
 

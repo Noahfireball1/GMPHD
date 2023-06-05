@@ -3,29 +3,51 @@ clc
 clear
 close all
 format shortg
-figure(1)
-hold on
+
 
 %% Creating an instance of the filter class and setting properties
 gmphd = GMPHD();
 
+% Initializing Properties
+gmphd.Initialization.scenario = 'simple';
+gmphd.Initialization.initTime = 1;
+gmphd.Initialization.finalTime = 100;
+gmphd.Initialization.timeStep = 1;
+
+% Birth Properties
+gmphd.Predict.birth.numBirths = 100;
+gmphd.Predict.birth.staticWeight = 0.05;
+gmphd.Predict.birth.staticStateRange = [-1000 1000 -25 25];
+gmphd.Predict.birth.staticCovariance = diag([4 1 4 1]);
+
+% Spawn Properties
+gmphd.Predict.spawn.numSpawns = 100;
+gmphd.Predict.spawn.staticWeight = 0.4;
+gmphd.Predict.spawn.staticCovariance = diag([4 1 4 1]);
+
 % Predict Properties
+gmphd.Predict.pSurvival = 0.9; % Probability that track survies next timestep
 
 % Observation Properties
+gmphd.Observations.measVar = 9;
+gmphd.Observations.lambda = 1; % Amount of noise added to measurements
+gmphd.Observations.clutterXRange = [-1000 1000];
+gmphd.Observations.clutterYRange = [-1000 1000];
 
 % Update Properties
+gmphd.Update.pDetection = 0.98;
 
 % Prune Properties
+gmphd.Prune.threshold = 0.1;
 
 % Extract Properties
+gmphd.Extraction.threshold = 0.4;
 
 
 %% Loading in scenario and generating truth tracjectories
-gmphd.Initialization.scenario = 'simple';
 gmphd.Initialization.genTruth();
 
 %% Running Filter
-
 time0 = gmphd.Initialization.initTime;
 time1 = gmphd.Initialization.finalTime;
 dTime = gmphd.Initialization.timeStep;
